@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Main" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <module name="galactic_groups.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.epiccompany.galactic_groups.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.galactic_groups.Main" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="PORT" value="8080" />
+      <env name="HEROKU_RELEASE_VERSION" value="local" />
+      <env name="JDBC_DATABASE_URL" value="jdbc:postgresql://localhost:5432/postgres?user=user&amp;password=password" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

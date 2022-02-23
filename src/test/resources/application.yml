@@ -1,0 +1,15 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+#    думаю позже всё же подключить для тестов postgres через testcontainers
+#  jpa:
+#    show-sql: true
+#    properties:
+#      hibernate.format_sql: true
+#    hibernate:
+#      ddl-auto: create-drop
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    ROOT: trace
