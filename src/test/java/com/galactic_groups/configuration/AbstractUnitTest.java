@@ -1,4 +1,4 @@
-package com.galactic_groups;
+package com.galactic_groups.configuration;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;

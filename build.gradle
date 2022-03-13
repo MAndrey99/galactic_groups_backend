@@ -1,6 +1,8 @@
 plugins {
-    id 'org.springframework.boot' version '3.0.0-SNAPSHOT'
+    id 'org.springframework.boot' version '2.6.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.github.johnrengelman.processes' version '0.5.0'
+    id 'org.springdoc.openapi-gradle-plugin' version '1.3.3'
     id 'java'
 }
 
@@ -26,17 +28,34 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.6.4'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.6.4'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.6.4'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.3'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.2'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.6'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.6.4'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.22.0'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.16.3'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
+}
+
+openApi {
+    // для анализа кода и генерации спецификации запускается приложение
+    apiDocsUrl.set('http://localhost:9090/api-docs')
+    forkProperties.set('-Dserver.port=9090')
+    outputDir.set(file('docs'))
+    outputFileName.set('openapi.yaml')
 }
 
 jar {
