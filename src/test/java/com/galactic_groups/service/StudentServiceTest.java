@@ -99,10 +99,44 @@ class StudentServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void tryCreateInvalidStudent() throws Exception {
+        var request = post(STUDENT_CONTROLLER_URL)
+                .contentType(APPLICATION_JSON)
+                .content("{\"fullName\":\"D\",\"phone\":\"y+4-478-787-878\"}");
+        mockMvc.perform(request)
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("""
+                    {
+                        "phone": "doesn't seem to be a valid phone number",
+                        "groupName": "must not be null",
+                        "fullName": "size must be between 2 and 64"
+                    }
+                """));
+    }
+
+    @Test
+    void tryCreateStudentWithSpecifiedId() throws Exception {
+        var request = post(STUDENT_CONTROLLER_URL)
+                .contentType(APPLICATION_JSON)
+                .content("{\"id\":15,\"fullName\":\"Dude\",\"phone\":\"+4-478-787-878\",\"groupName\":\"7070\"}");
+        mockMvc.perform(request)
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("""
+                    {
+                        "id": "must be null"
+                    }
+                """));
+    }
+
+    @Test
     void deleteStudent() throws Exception {
+        assertTrue(studentRepository.findById(1L).isPresent());
         mockMvc.perform(delete(STUDENT_CONTROLLER_URL + "/1")).andExpect(status().isOk());
         assertFalse(studentRepository.findById(1L).isPresent());
         assertTrue(studentRepository.findById(2L).isPresent());
         assertTrue(studentRepository.findById(3L).isPresent());
+        mockMvc.perform(delete(STUDENT_CONTROLLER_URL + "/1")).andExpect(status().isNoContent());
     }
 }
