@@ -3,7 +3,7 @@
     <module name="galactic_groups.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.epiccompany.galactic_groups.*" />
+        <option name="PATTERN" value="com.galactic_groups.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
@@ -11,7 +11,8 @@
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
       <env name="PORT" value="8080" />
-      <env name="HEROKU_RELEASE_VERSION" value="local" />
+      <env name="ADMIN_LOGIN" value="admin" />
+      <env name="ADMIN_PASSWORD" value="admin" />
       <env name="JDBC_DATABASE_URL" value="jdbc:postgresql://localhost:5432/postgres?user=user&amp;password=password" />
     </envs>
     <method v="2">

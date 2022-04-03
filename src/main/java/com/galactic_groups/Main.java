@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories("com.galactic_groups.repository")
+@EnableJpaRepositories("com.galactic_groups.data.repository")
 public class Main {
 
     public static void main(String[] args) {

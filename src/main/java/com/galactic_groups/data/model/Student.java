@@ -1,7 +1,7 @@
-package com.galactic_groups.model;
+package com.galactic_groups.data.model;
 
-import com.galactic_groups.validation.OnCreate;
-import com.galactic_groups.validation.annotation.ValidPhoneNumber;
+import com.galactic_groups.data.validation.OnCreate;
+import com.galactic_groups.data.validation.annotation.PhoneNumber;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +12,6 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "student")
 @Getter
-@Setter
 @ToString
 @Builder
 @AllArgsConstructor
@@ -41,6 +40,10 @@ public class Student {
     private String address;
 
     @Column(name = "phone_number")
-    @ValidPhoneNumber
+    @PhoneNumber
     private String phone;
+
+    @Column(name = "organization_id", nullable = false)
+    @NotNull
+    private Long organizationId;
 }

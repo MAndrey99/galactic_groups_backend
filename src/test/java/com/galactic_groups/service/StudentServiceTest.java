@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galactic_groups.configuration.AbstractIntegrationTest;
 import com.galactic_groups.controllers.GroupController;
 import com.galactic_groups.controllers.StudentController;
-import com.galactic_groups.model.Student;
-import com.galactic_groups.repository.StudentRepository;
+import com.galactic_groups.data.model.Student;
+import com.galactic_groups.data.repository.StudentRepository;
 import com.galactic_groups.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+import static com.galactic_groups.data.view.UserRole.Employee;
+import static com.galactic_groups.utils.TestUtils.authorized;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -35,7 +37,7 @@ class StudentServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void getStudentsByGroup() throws Exception {
-        mockMvc.perform(get(GROUP_CONTROLLER_URL).param("name", "7375"))
+        mockMvc.perform(authorized(get(GROUP_CONTROLLER_URL), Employee).param("name", "7375"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -46,11 +48,13 @@ class StudentServiceIntegrationTest extends AbstractIntegrationTest {
                                 "address": "city 1, st.2",
                                 "fullName": "Maslov Andrey",
                                 "groupName": "7375",
-                                "phone": "88005553535"
+                                "phone": "88005553535",
+                                "organizationId": 1
                             },
                             {
                                 "fullName": "Dmitriy Bond",
-                                "groupName": "7375"
+                                "groupName": "7375",
+                                "organizationId": 1
                             }
                         ]
                     }
@@ -59,7 +63,7 @@ class StudentServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void getAllGroups() throws Exception {
-        var resp = mockMvc.perform(get(GROUP_CONTROLLER_URL + "/list").contentType(APPLICATION_JSON))
+        var resp = mockMvc.perform(authorized(get(GROUP_CONTROLLER_URL + "/list"), Employee).contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andReturn().getResponse()
                 .getContentAsString();
@@ -73,9 +77,10 @@ class StudentServiceIntegrationTest extends AbstractIntegrationTest {
         var newStudent = Student.builder()
                 .fullName("Dude")
                 .groupName("7373")
+                .organizationId(1L)
                 .build();
 
-        var request = post(STUDENT_CONTROLLER_URL)
+        var request = authorized(post(STUDENT_CONTROLLER_URL), Employee)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newStudent));
         var resp = mockMvc.perform(request)
@@ -100,9 +105,9 @@ class StudentServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void tryCreateInvalidStudent() throws Exception {
-        var request = post(STUDENT_CONTROLLER_URL)
+        var request = authorized(post(STUDENT_CONTROLLER_URL), Employee)
                 .contentType(APPLICATION_JSON)
-                .content("{\"fullName\":\"D\",\"phone\":\"y+4-478-787-878\"}");
+                .content("{\"fullName\":\"D\",\"phone\":\"y+4-478-787-878\", \"organizationId\": 1}");
         mockMvc.perform(request)
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -117,9 +122,9 @@ class StudentServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void tryCreateStudentWithSpecifiedId() throws Exception {
-        var request = post(STUDENT_CONTROLLER_URL)
+        var request = authorized(post(STUDENT_CONTROLLER_URL), Employee)
                 .contentType(APPLICATION_JSON)
-                .content("{\"id\":15,\"fullName\":\"Dude\",\"phone\":\"+4-478-787-878\",\"groupName\":\"7070\"}");
+                .content("{\"id\":15,\"fullName\":\"Dude\",\"phone\":\"+4-478-787-878\",\"groupName\":\"7070\",\"organizationId\":1}");
         mockMvc.perform(request)
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -133,10 +138,10 @@ class StudentServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void deleteStudent() throws Exception {
         assertTrue(studentRepository.findById(1L).isPresent());
-        mockMvc.perform(delete(STUDENT_CONTROLLER_URL + "/1")).andExpect(status().isOk());
+        mockMvc.perform(authorized(delete(STUDENT_CONTROLLER_URL + "/1"), Employee)).andExpect(status().isOk());
         assertFalse(studentRepository.findById(1L).isPresent());
         assertTrue(studentRepository.findById(2L).isPresent());
         assertTrue(studentRepository.findById(3L).isPresent());
-        mockMvc.perform(delete(STUDENT_CONTROLLER_URL + "/1")).andExpect(status().isNoContent());
+        mockMvc.perform(authorized(delete(STUDENT_CONTROLLER_URL + "/1"), Employee)).andExpect(status().isNoContent());
     }
 }

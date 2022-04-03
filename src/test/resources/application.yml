@@ -12,3 +12,7 @@ spring:
 logging:
   level:
     ROOT: trace
+
+security:
+  admin_login: admin
+  admin_password: admin

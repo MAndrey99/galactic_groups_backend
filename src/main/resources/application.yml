@@ -19,6 +19,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus,health,info,metrics
+        include: health
     health:
       show-details: always
+
+security:
+  admin_login:  ${ADMIN_LOGIN}
+  admin_password:  ${ADMIN_PASSWORD}
