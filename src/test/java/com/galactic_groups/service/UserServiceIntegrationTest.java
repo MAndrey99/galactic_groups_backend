@@ -16,8 +16,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserServiceIntegrationTest extends AbstractIntegrationTest {
-    private static final String ORGANIZATION_CONTROLLER_URL =
-            OrganizationController.class.getAnnotation(RequestMapping.class).value()[0];
     private static final String USER_CONTROLLER_URL =
             UserController.class.getAnnotation(RequestMapping.class).value()[0];
 

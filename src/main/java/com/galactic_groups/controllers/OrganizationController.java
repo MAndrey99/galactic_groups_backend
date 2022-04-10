@@ -4,7 +4,7 @@ import com.galactic_groups.data.dto.OrganizationInfo;
 import com.galactic_groups.data.dto.UserInfo;
 import com.galactic_groups.data.model.Organization;
 import com.galactic_groups.data.validation.OnCreate;
-import com.galactic_groups.service.UserService;
+import com.galactic_groups.service.OrganizationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,9 +24,9 @@ import java.util.Map;
 @AllArgsConstructor
 @Validated
 public class OrganizationController {
-    private final UserService userService;
+    private final OrganizationService organizationService;
 
-    @Operation(summary = "Create new user", security = @SecurityRequirement(name = "basicAuth"))
+    @Operation(summary = "Create new organization", security = @SecurityRequirement(name = "basicAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created new organization",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Organization.class))),
@@ -37,7 +37,7 @@ public class OrganizationController {
     @ResponseStatus(HttpStatus.CREATED)
     @Validated(OnCreate.class)
     public Organization createOrganization(@RequestBody @Valid Organization org) {
-        return userService.createOrganization(org);
+        return organizationService.createOrganization(org);
     }
 
     @Operation(summary = "Get current organization info", security = @SecurityRequirement(name = "basicAuth"))
@@ -47,8 +47,17 @@ public class OrganizationController {
     })
     @GetMapping(path = "/current")
     public OrganizationInfo getCurrentOrganizationInfo() {
-        return userService.getCurrentOrganizationInfo();
+        return organizationService.getCurrentOrganizationInfo();
     }
 
-    // возможно, потом их не только создавать можно будет... Но пока и этого хватит.
+    @Operation(summary = "Delete organization", security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Organization deleted", content = @Content),
+            @ApiResponse(responseCode = "204", description = "Organization does not exist", content = @Content)
+    })
+    @DeleteMapping(path = "/{id}")
+    @Validated(OnCreate.class)
+    public void deleteOrganization(@PathVariable int id) {
+        organizationService.deleteOrganization(id);
+    }
 }

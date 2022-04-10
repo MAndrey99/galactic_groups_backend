@@ -48,7 +48,7 @@ public class GalacticUserDetailsService implements UserDetailsService {
 
         var mail = new Object() {
             @Email
-            private String mail;
+            String mail;
         };
         mail.mail = mailString;
 

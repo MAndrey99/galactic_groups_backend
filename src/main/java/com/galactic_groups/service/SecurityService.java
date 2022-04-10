@@ -18,15 +18,23 @@ class SecurityService {
                 || (user.getRole() == UserRole.Owner || checkAccessToOrganization(user, target.getOrganizationId()));
     }
 
+    // TODO: потом лучше нормально расписать разные виды доступа (чтение/изменение) и не только к организациям
     boolean checkAccessToOrganization(UserSecurityView user, Integer organizationId) {
         return Objects.equals(user.getOrganizationId(), organizationId);
     }
 
+    void require(boolean hasRequiredAuthority) {
+        require(hasRequiredAuthority, null);
+    }
+
+    void require(boolean hasRequiredAuthority, String message) {
+        if (!hasRequiredAuthority)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, message);
+    }
+
     UserSecurityView getUserWithOrganizationId() {
         var user = getAuthenticatedUserView();
-        if (user.getOrganizationId() == null) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The user is not a member of an organization");
-        }
+        require(user.getOrganizationId() != null, "The user is not a member of an organization");
         return user;
     }
 

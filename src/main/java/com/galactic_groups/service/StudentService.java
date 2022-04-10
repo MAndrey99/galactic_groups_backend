@@ -34,8 +34,7 @@ public class StudentService {
     @Transactional
     public Student createStudent(@NonNull Student student) {
         var user = securityService.getUserWithOrganizationId();
-        if (!securityService.checkAccessToOrganization(user, student.getOrganizationId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        securityService.require(securityService.checkAccessToOrganization(user, student.getOrganizationId()));
         return studentRepository.save(student);
     }
 

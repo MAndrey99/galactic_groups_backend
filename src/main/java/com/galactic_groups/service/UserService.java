@@ -1,10 +1,8 @@
 package com.galactic_groups.service;
 
-import com.galactic_groups.data.dto.OrganizationInfo;
+import com.galactic_groups.data.cache.OrganizationCache;
 import com.galactic_groups.data.dto.UserInfo;
-import com.galactic_groups.data.model.Organization;
 import com.galactic_groups.data.model.User;
-import com.galactic_groups.data.repository.OrganizationRepository;
 import com.galactic_groups.data.repository.UserRepository;
 import com.galactic_groups.data.view.UserRole;
 import com.galactic_groups.data.view.UserSecurityView;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,12 +22,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final SecurityService securityService;
-    private final OrganizationRepository organizationRepository;
+    private final OrganizationCache organizationCache;
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public UserInfo getCurrentUserInfo() {
         return buildUserInfo((User) securityService.getAuthenticatedUserView());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserInfo> getUsersByOrgId(Integer orgId) {
+        return userRepository.findByOrganizationId(orgId).stream()
+                .map(this::buildUserInfo)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -40,34 +46,11 @@ public class UserService {
             else
                 user.setOrganizationId(authenticatedUserInfo.getOrganizationId());
         }
-        if (!securityService.checkAccessToUser(authenticatedUserInfo, user))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        securityService.require(securityService.checkAccessToUser(authenticatedUserInfo, user));
         userRepository.save(user);
         var result = buildUserInfo(user);
         log.info("created new user: {}", result);
         return result;
-    }
-
-    @Transactional
-    public Organization createOrganization(Organization org) {
-        var authenticatedUserInfo = securityService.getAuthenticatedUserView();
-        if (authenticatedUserInfo.getRole() != UserRole.Admin) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
-        var created = organizationRepository.save(org);
-        log.info("created new organization {}", org);
-        return created;
-    }
-
-    @Transactional(readOnly = true)
-    public OrganizationInfo getCurrentOrganizationInfo() {
-        var authenticatedUser = (User) securityService.getUserWithOrganizationId();
-        var userInfo = buildUserInfo(authenticatedUser);
-        return new OrganizationInfo(userInfo.orgName(),
-                userRepository.findByOrganizationId(authenticatedUser.getOrganizationId()).stream()
-                        .map(this::buildUserInfo)
-                        .collect(Collectors.toList())
-        );
     }
 
     @Transactional
@@ -79,9 +62,7 @@ public class UserService {
             }
             UserSecurityView user = userRepository.findById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
-            if (!securityService.checkAccessToOrganization(authenticatedUser, user.getOrganizationId())) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-            }
+            securityService.require(securityService.checkAccessToOrganization(authenticatedUser, user.getOrganizationId()));
         }
         try {
             userRepository.deleteById(id);
@@ -93,8 +74,7 @@ public class UserService {
     private UserInfo buildUserInfo(User user) {
         String orgName = null;
         if (user.getOrganizationId() != null) {
-            // TODO: cache
-            orgName = organizationRepository.getById(user.getOrganizationId()).getOrgName();
+            orgName = organizationCache.getById(user.getOrganizationId()).getOrgName();
         }
         return new UserInfo(user.getId(), user.getFullName(), user.getMail(), orgName, user.getRole().name());
     }
