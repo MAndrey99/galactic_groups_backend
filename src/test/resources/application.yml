@@ -3,11 +3,12 @@ spring:
     allow-bean-definition-overriding: true
   jpa:
     show-sql: true
+    open-in-view: false
     properties:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 logging:
   level:

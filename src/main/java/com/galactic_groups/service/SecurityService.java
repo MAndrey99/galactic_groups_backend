@@ -18,7 +18,7 @@ class SecurityService {
                 || (user.getRole() == UserRole.Owner || checkAccessToOrganization(user, target.getOrganizationId()));
     }
 
-    boolean checkAccessToOrganization(UserSecurityView user, Long organizationId) {
+    boolean checkAccessToOrganization(UserSecurityView user, Integer organizationId) {
         return Objects.equals(user.getOrganizationId(), organizationId);
     }
 

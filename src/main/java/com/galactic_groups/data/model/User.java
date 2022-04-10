@@ -20,8 +20,9 @@ import javax.validation.constraints.Size;
 public class User implements UserSecurityView {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "service_user_seq_gen")
+    @SequenceGenerator(name = "service_user_seq_gen", sequenceName = "service_user_id_seq", allocationSize = 1)
     @Null(groups = OnCreate.class)
     private Long id;
 
@@ -38,7 +39,7 @@ public class User implements UserSecurityView {
 
     @Column(name = "organization_id", nullable = false)
     @Setter
-    private Long organizationId;  // TODO: связать бы с Organization, мб через flyway...
+    private Integer organizationId;
 
     @Column(name = "role_id", nullable = false)
     @Enumerated(value = EnumType.ORDINAL)

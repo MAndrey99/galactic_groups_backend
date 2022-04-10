@@ -17,12 +17,13 @@ import javax.validation.constraints.Size;
 public class Organization {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "organization_seq_gen")
+    @SequenceGenerator(name = "organization_seq_gen", sequenceName = "organization_id_seq", allocationSize = 1)
     @Null(groups = OnCreate.class)
-    private Long id;
+    private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "org_name", nullable = false)
     @NonNull
     @NotNull
     @Size(min = 3)

@@ -39,6 +39,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: springdocOpenapiVersion
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: flywayVersion
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion

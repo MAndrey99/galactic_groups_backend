@@ -19,8 +19,9 @@ import javax.validation.constraints.Size;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_seq_gen")
+    @SequenceGenerator(name = "student_seq_gen", sequenceName = "student_id_seq", allocationSize = 1)
     @Null(groups = OnCreate.class)
     private Long id;
 
@@ -45,5 +46,5 @@ public class Student {
 
     @Column(name = "organization_id", nullable = false)
     @NotNull
-    private Long organizationId;
+    private Integer organizationId;
 }

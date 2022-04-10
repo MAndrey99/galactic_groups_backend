@@ -11,10 +11,10 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
 
-    List<Student> findAllByGroupNameAndOrganizationId(String group, long organizationId);
+    List<Student> findAllByGroupNameAndOrganizationId(String group, int organizationId);
 
     @Query("select distinct groupName from Student where organizationId = :organizationId")
-    List<String> findAllGroups(long organizationId);
+    List<String> findAllGroups(int organizationId);
 
-    int deleteByIdAndOrganizationId(long id, long organizationId);
+    int deleteByIdAndOrganizationId(long id, int organizationId);
 }

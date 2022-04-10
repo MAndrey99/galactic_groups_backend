@@ -13,5 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     Optional<User> findByMail(String mail);
 
-    List<User> findByOrganizationId(long orgId);
+    List<User> findByOrganizationId(int orgId);
 }

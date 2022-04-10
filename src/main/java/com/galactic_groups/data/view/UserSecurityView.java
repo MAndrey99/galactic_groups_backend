@@ -12,7 +12,7 @@ public interface UserSecurityView extends UserDetails {
 
     String getMail();
 
-    Long getOrganizationId();
+    Integer getOrganizationId();
 
     UserRole getRole();
 

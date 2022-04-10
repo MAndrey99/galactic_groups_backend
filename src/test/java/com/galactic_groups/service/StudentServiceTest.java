@@ -77,7 +77,7 @@ class StudentServiceIntegrationTest extends AbstractIntegrationTest {
         var newStudent = Student.builder()
                 .fullName("Dude")
                 .groupName("7373")
-                .organizationId(1L)
+                .organizationId(1)
                 .build();
 
         var request = authorized(post(STUDENT_CONTROLLER_URL), Employee)
