@@ -56,7 +56,6 @@ public class OrganizationController {
             @ApiResponse(responseCode = "204", description = "Organization does not exist", content = @Content)
     })
     @DeleteMapping(path = "/{id}")
-    @Validated(OnCreate.class)
     public void deleteOrganization(@PathVariable int id) {
         organizationService.deleteOrganization(id);
     }

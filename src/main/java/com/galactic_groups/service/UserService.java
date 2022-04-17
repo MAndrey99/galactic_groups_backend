@@ -34,7 +34,7 @@ public class UserService {
     public List<UserInfo> getUsersByOrgId(Integer orgId) {
         return userRepository.findByOrganizationId(orgId).stream()
                 .map(this::buildUserInfo)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional

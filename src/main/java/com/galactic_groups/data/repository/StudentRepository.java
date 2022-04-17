@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
+    // TODO: как-нибудь потом добавить индексы (group, organizationId)
 
     List<Student> findAllByGroupNameAndOrganizationId(String group, int organizationId);
 

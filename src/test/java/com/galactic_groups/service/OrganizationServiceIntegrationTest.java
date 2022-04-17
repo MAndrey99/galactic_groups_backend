@@ -3,32 +3,44 @@ package com.galactic_groups.service;
 import com.galactic_groups.configuration.AbstractIntegrationTest;
 import com.galactic_groups.controllers.OrganizationController;
 import com.galactic_groups.data.repository.OrganizationRepository;
-import org.junit.jupiter.api.Test;
+import com.galactic_groups.data.view.UserRole;
+import com.galactic_groups.utils.RequestProvider;
+import com.galactic_groups.utils.RequestResultPostProcessor;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import static com.galactic_groups.data.view.UserRole.Admin;
-import static com.galactic_groups.data.view.UserRole.Employee;
-import static com.galactic_groups.utils.TestUtils.authorized;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class OrganizationServiceIntegrationTest extends AbstractIntegrationTest {
+class OrganizationServiceIntegrationTest extends AbstractIntegrationTest {
     private static final String ORGANIZATION_CONTROLLER_URL =
             OrganizationController.class.getAnnotation(RequestMapping.class).value()[0];
 
     @Autowired
-    OrganizationRepository organizationRepository;
+    private OrganizationRepository organizationRepository;
 
-    @Test
-    void deleteOrganization() throws Exception {
+    @ParameterizedTest
+    @EnumSource(UserRole.class)
+    void deleteOrganization(UserRole role) {
         assertTrue(organizationRepository.findById(1).isPresent());
-        mockMvc.perform(authorized(delete(ORGANIZATION_CONTROLLER_URL + "/1"), Employee)).andExpect(status().isForbidden());
-        mockMvc.perform(authorized(delete(ORGANIZATION_CONTROLLER_URL + "/1"), Admin)).andExpect(status().isOk());
-        assertFalse(organizationRepository.findById(1).isPresent());
-        mockMvc.perform(authorized(delete(ORGANIZATION_CONTROLLER_URL + "/1"), Admin)).andExpect(status().isNoContent());
+        RequestProvider request = () -> delete(ORGANIZATION_CONTROLLER_URL + "/1");
+        RequestResultPostProcessor okChecker = resultActions -> {
+            resultActions.andExpect(status().isOk());
+            assertFalse(organizationRepository.findById(1).isPresent());
+        };
+        RequestResultPostProcessor errChecker = resultActions -> {
+            assertTrue(organizationRepository.findById(1).isPresent());
+        };
+        var multiAuthorizationRequestHelper =
+                multiAuthorizationRequestHelperFactory.buildMultiAuthorizationRequestHelper(
+                        request, okChecker, errChecker, Admin);
+
+        multiAuthorizationRequestHelper.performAs(role);
     }
 
     // TODO
