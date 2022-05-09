@@ -1,7 +1,8 @@
-package com.galactic_groups.model;
+package com.galactic_groups.data.model;
 
-import com.galactic_groups.validation.OnCreate;
-import com.galactic_groups.validation.annotation.ValidPhoneNumber;
+import com.galactic_groups.data.validation.OnCreate;
+import com.galactic_groups.data.validation.annotation.PhoneNumber;
+import com.galactic_groups.data.view.StudentSecurityView;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,16 +13,16 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "student")
 @Getter
-@Setter
 @ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Student {
+public class Student implements StudentSecurityView {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_seq_gen")
+    @SequenceGenerator(name = "student_seq_gen", sequenceName = "student_id_seq", allocationSize = 1)
     @Null(groups = OnCreate.class)
     private Long id;
 
@@ -41,6 +42,10 @@ public class Student {
     private String address;
 
     @Column(name = "phone_number")
-    @ValidPhoneNumber
+    @PhoneNumber
     private String phone;
+
+    @Column(name = "organization_id", nullable = false)
+    @NotNull
+    private Integer organizationId;
 }

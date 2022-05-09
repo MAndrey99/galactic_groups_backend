@@ -1,5 +1,9 @@
 package com.galactic_groups.utils;
 
+import com.galactic_groups.data.view.UserRole;
+import lombok.NonNull;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+
 import java.util.Objects;
 import java.util.Set;
 
@@ -31,5 +35,18 @@ public interface TestUtils {
             }
         }
         return true;
+    }
+
+    static MockHttpServletRequestBuilder authorized(@NonNull RequestProvider requestProvider,
+                                                    @NonNull UserRole role) throws Exception {
+        return requestProvider.get().header("Authorization", "Basic " + switch (role) {
+            case Admin -> "YWRtaW46YWRtaW4=";
+            case Owner -> "b3duZXJAbGV0aS5ydTpwYXNzd29yZA==";
+            case Employee -> "dXNlckBsZXRpLnJ1OnBhc3N3b3Jk";
+        });
+    }
+
+    static MockHttpServletRequestBuilder unauthorized(@NonNull RequestProvider requestProvider) throws Exception {
+        return requestProvider.get();
     }
 }

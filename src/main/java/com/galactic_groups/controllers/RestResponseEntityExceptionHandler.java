@@ -22,7 +22,7 @@ import java.util.Map;
 @ControllerAdvice
 class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {JsonProcessingException.class})
+    @ExceptionHandler(JsonProcessingException.class)
     protected ResponseEntity<Object> handleExpectationFailed(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, null, new HttpHeaders(), HttpStatus.EXPECTATION_FAILED, request);
     }
@@ -32,7 +32,7 @@ class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler 
         return handleExceptionInternal(ex, null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
-    @ExceptionHandler(value = {EntityNotFoundException.class})
+    @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, null, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
@@ -52,7 +52,7 @@ class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler 
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
+        ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
             errors.put(fieldName, message);

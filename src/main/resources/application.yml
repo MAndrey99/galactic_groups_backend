@@ -8,8 +8,9 @@ springdoc:
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
   datasource:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
@@ -19,6 +20,14 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus,health,info,metrics
+        include: health
+      cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
+        allowed-headers: "*"
     health:
       show-details: always
+
+security:
+  admin_login:  ${ADMIN_LOGIN}
+  admin_password:  ${ADMIN_PASSWORD}

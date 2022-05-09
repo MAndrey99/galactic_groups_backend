@@ -1,6 +1,6 @@
-package com.galactic_groups.dto;
+package com.galactic_groups.data.dto;
 
-import com.galactic_groups.model.Student;
+import com.galactic_groups.data.model.Student;
 
 import java.util.List;
 

@@ -1,12 +1,13 @@
 package com.galactic_groups.controllers;
 
-import com.galactic_groups.dto.Group;
+import com.galactic_groups.data.dto.Group;
 import com.galactic_groups.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-@RestController()
-@RequestMapping("/group")
+@RestController
+@RequestMapping("/api/group")
 @AllArgsConstructor
 public class GroupController {
     private final StudentService studentService;
 
-    @Operation(summary = "Get a group of students")
+    @Operation(summary = "Get a group of students", security = @SecurityRequirement(name = "basicAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Group.class))),
@@ -34,13 +35,13 @@ public class GroupController {
         return new Group(group, studentService.getStudentsByGroup(group));
     }
 
-    @Operation(summary = "Get list of all existing group names")
+    @Operation(summary = "Get list of all existing group names", security = @SecurityRequirement(name = "basicAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found zero or more",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = List.class)))
     })
     @GetMapping("/list")
-    public List<String> getGroupsList() {
-        return studentService.getGroupsList();
+    public List<String> getGroupsList(@RequestParam(value = "organizationId") int orgId) {
+        return studentService.getGroupsList(orgId);
     }
 }

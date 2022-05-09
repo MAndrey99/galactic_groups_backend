@@ -13,7 +13,7 @@ java {
 }
 
 group = 'com.epicCompany'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 configurations {
     compileOnly {
@@ -32,16 +32,19 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion
     implementation group: 'org.postgresql', name: 'postgresql', version: postgresVersion
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: springdocOpenapiVersion
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: flywayVersion
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
     testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion

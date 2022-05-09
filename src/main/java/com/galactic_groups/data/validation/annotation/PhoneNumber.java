@@ -1,6 +1,6 @@
-package com.galactic_groups.validation.annotation;
+package com.galactic_groups.data.validation.annotation;
 
-import com.galactic_groups.validation.validator.PhoneNumberValidator;
+import com.galactic_groups.data.validation.validator.PhoneNumberValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PhoneNumberValidator.class)
-public @interface ValidPhoneNumber {
+public @interface PhoneNumber {
 
     String message() default "doesn't seem to be a valid phone number";
 
