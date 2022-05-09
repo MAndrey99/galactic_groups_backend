@@ -1,9 +1,8 @@
 package com.galactic_groups.data.model;
 
 import com.galactic_groups.data.validation.OnCreate;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.ToString;
+import com.galactic_groups.data.view.OrganizationSecurityView;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,8 +12,11 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "organization")
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class Organization {
+public class Organization implements OrganizationSecurityView {
 
     @Id
     @Column(name = "id")

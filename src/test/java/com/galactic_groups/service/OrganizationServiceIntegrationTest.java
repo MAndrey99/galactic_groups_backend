@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import static com.galactic_groups.data.view.UserRole.Admin;
+import static com.galactic_groups.data.view.UserRole.Owner;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -38,7 +39,7 @@ class OrganizationServiceIntegrationTest extends AbstractIntegrationTest {
         };
         var multiAuthorizationRequestHelper =
                 multiAuthorizationRequestHelperFactory.buildMultiAuthorizationRequestHelper(
-                        request, okChecker, errChecker, Admin);
+                        request, okChecker, errChecker, Owner, Admin);
 
         multiAuthorizationRequestHelper.performAs(role);
     }

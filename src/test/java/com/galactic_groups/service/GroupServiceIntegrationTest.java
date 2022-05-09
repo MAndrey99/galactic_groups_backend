@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-import static com.galactic_groups.data.view.UserRole.Employee;
-import static com.galactic_groups.data.view.UserRole.Owner;
+import static com.galactic_groups.data.view.UserRole.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -59,16 +58,17 @@ class GroupServiceIntegrationTest extends AbstractIntegrationTest {
         };
         var multiAuthorizationRequestHelper =
                 multiAuthorizationRequestHelperFactory.buildMultiAuthorizationRequestHelper(
-                        request, okChecker, null, Owner, Employee);
+                        request, okChecker, null, Owner, Employee, Admin);
         multiAuthorizationRequestHelper.performAs(role);
     }
 
     @ParameterizedTest
     @EnumSource(UserRole.class)
     void getAllGroups(UserRole role) {
-        RequestProvider request = () -> get(GROUP_CONTROLLER_URL + "/list");
+        RequestProvider request = () -> get(GROUP_CONTROLLER_URL + "/list").param("organizationId", "1");
         RequestResultPostProcessor okChecker = resultActions -> {
             var resp = resultActions
+                    .andExpect(status().isOk())
                     .andExpect(content().contentType(APPLICATION_JSON))
                     .andDo(print())
                     .andReturn().getResponse()
@@ -79,7 +79,7 @@ class GroupServiceIntegrationTest extends AbstractIntegrationTest {
         };
         var multiAuthorizationRequestHelper =
                 multiAuthorizationRequestHelperFactory.buildMultiAuthorizationRequestHelper(
-                        request, okChecker, null, Owner, Employee);
+                        request, okChecker, null, Owner, Employee, Admin);
         multiAuthorizationRequestHelper.performAs(role);
     }
 }

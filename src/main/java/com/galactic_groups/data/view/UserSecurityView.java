@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface UserSecurityView extends UserDetails {
 
+    Long getId();
+
     String getMail();
 
     Integer getOrganizationId();

@@ -2,6 +2,7 @@ package com.galactic_groups.data.model;
 
 import com.galactic_groups.data.validation.OnCreate;
 import com.galactic_groups.data.validation.annotation.PhoneNumber;
+import com.galactic_groups.data.view.StudentSecurityView;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Size;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Student {
+public class Student implements StudentSecurityView {
 
     @Id
     @Column(name = "id")

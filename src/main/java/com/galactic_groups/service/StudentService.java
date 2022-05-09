@@ -1,7 +1,10 @@
 package com.galactic_groups.service;
 
+import com.galactic_groups.data.dto.OrganizationSecurityData;
 import com.galactic_groups.data.model.Student;
 import com.galactic_groups.data.repository.StudentRepository;
+import com.galactic_groups.service.security.AccessMode;
+import com.galactic_groups.service.security.SecurityService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,27 +24,32 @@ public class StudentService {
 
     @Transactional(readOnly = true)
     public List<Student> getStudentsByGroup(@NonNull String group) {
-        var user = securityService.getUserWithOrganizationId();
-        return studentRepository.findAllByGroupNameAndOrganizationId(group, user.getOrganizationId());
+        var accessManager = securityService.getAccessManager();
+        return studentRepository.findAllByGroupName(group).stream()
+                .filter(stud -> accessManager.checkAccessTo(stud, AccessMode.READ).isAllowed())
+                .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<String> getGroupsList() {
-        var user = securityService.getUserWithOrganizationId();
-        return studentRepository.findAllGroups(user.getOrganizationId());
+    public List<String> getGroupsList(int organizationId) {
+        securityService.require(accessManager -> accessManager.checkAccessTo(
+                new OrganizationSecurityData(organizationId), AccessMode.READ));
+        return studentRepository.findAllGroups(organizationId);
     }
 
     @Transactional
     public Student createStudent(@NonNull Student student) {
-        var user = securityService.getUserWithOrganizationId();
-        securityService.require(securityService.checkAccessToOrganization(user, student.getOrganizationId()));
+        securityService.require(accessManager ->
+                accessManager.checkAccessTo(student, AccessMode.WRITE));
         return studentRepository.save(student);
     }
 
     @Transactional
     public void deleteById(long id) {
-        var user = securityService.getUserWithOrganizationId();
-        if (studentRepository.deleteByIdAndOrganizationId(id, user.getOrganizationId()) == 0)
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        var student = studentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        securityService.require(accessManager ->
+                accessManager.checkAccessTo(student, AccessMode.WRITE));
+        studentRepository.delete(student);
     }
 }

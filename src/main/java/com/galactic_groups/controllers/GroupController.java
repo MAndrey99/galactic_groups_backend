@@ -41,7 +41,7 @@ public class GroupController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = List.class)))
     })
     @GetMapping("/list")
-    public List<String> getGroupsList() {
-        return studentService.getGroupsList();
+    public List<String> getGroupsList(@RequestParam(value = "organizationId") int orgId) {
+        return studentService.getGroupsList(orgId);
     }
 }

@@ -1,6 +1,6 @@
 package com.galactic_groups.configuration;
 
-import com.galactic_groups.service.GalacticUserDetailsService;
+import com.galactic_groups.service.security.GalacticUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

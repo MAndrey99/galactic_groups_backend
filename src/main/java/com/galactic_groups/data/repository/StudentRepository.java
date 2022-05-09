@@ -12,10 +12,8 @@ import java.util.List;
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
     // TODO: как-нибудь потом добавить индексы (group, organizationId)
 
-    List<Student> findAllByGroupNameAndOrganizationId(String group, int organizationId);
+    List<Student> findAllByGroupName(String group);
 
     @Query("select distinct groupName from Student where organizationId = :organizationId")
     List<String> findAllGroups(int organizationId);
-
-    int deleteByIdAndOrganizationId(long id, int organizationId);
 }

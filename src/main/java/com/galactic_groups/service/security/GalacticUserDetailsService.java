@@ -1,4 +1,4 @@
-package com.galactic_groups.service;
+package com.galactic_groups.service.security;
 
 import com.galactic_groups.configuration.SecurityConfigurationData;
 import com.galactic_groups.data.model.User;

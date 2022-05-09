@@ -40,14 +40,14 @@ public class OrganizationController {
         return organizationService.createOrganization(org);
     }
 
-    @Operation(summary = "Get current organization info", security = @SecurityRequirement(name = "basicAuth"))
+    @Operation(summary = "Get organization info", security = @SecurityRequirement(name = "basicAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserInfo.class)))
     })
-    @GetMapping(path = "/current")
-    public OrganizationInfo getCurrentOrganizationInfo() {
-        return organizationService.getCurrentOrganizationInfo();
+    @GetMapping(path = "/{id}")
+    public OrganizationInfo getCurrentOrganizationInfo(@PathVariable int id) {
+        return organizationService.getOrganizationInfo(id);
     }
 
     @Operation(summary = "Delete organization", security = @SecurityRequirement(name = "basicAuth"))

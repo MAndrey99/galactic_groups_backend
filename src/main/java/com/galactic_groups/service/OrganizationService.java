@@ -2,9 +2,11 @@ package com.galactic_groups.service;
 
 import com.galactic_groups.data.cache.OrganizationCache;
 import com.galactic_groups.data.dto.OrganizationInfo;
+import com.galactic_groups.data.dto.OrganizationSecurityData;
 import com.galactic_groups.data.model.Organization;
 import com.galactic_groups.data.repository.OrganizationRepository;
-import com.galactic_groups.data.view.UserRole;
+import com.galactic_groups.service.security.AccessMode;
+import com.galactic_groups.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,9 +26,8 @@ public class OrganizationService {
 
     @Transactional
     public Organization createOrganization(Organization org) {
-        var user = securityService.getAuthenticatedUserView();
-        securityService.require(user.getRole() == UserRole.Admin
-                && user.getOrganizationId() == null);
+        securityService.require(accessManager ->
+                accessManager.checkAccessTo(org, AccessMode.WRITE));
         var created = organizationRepository.save(org);
         log.info("created new organization {}", org);
         return created;
@@ -34,9 +35,8 @@ public class OrganizationService {
 
     @Transactional
     public void deleteOrganization(int id) {
-        var user = securityService.getAuthenticatedUserView();
-        securityService.require(user.getRole() == UserRole.Admin
-                && (user.getOrganizationId() == null || user.getOrganizationId() == id));
+        securityService.require(accessManager ->
+                accessManager.checkAccessTo(new OrganizationSecurityData(id), AccessMode.WRITE));
         try {
             organizationRepository.deleteById(id);
             organizationCache.invalidateById(id);
@@ -46,9 +46,10 @@ public class OrganizationService {
     }
 
     @Transactional(readOnly = true)
-    public OrganizationInfo getCurrentOrganizationInfo() {
-        var organization = organizationCache.getById(
-                securityService.getUserWithOrganizationId().getOrganizationId());
+    public OrganizationInfo getOrganizationInfo(int id) {
+        securityService.require(accessManager ->
+                accessManager.checkAccessTo(new OrganizationSecurityData(id), AccessMode.READ));
+        var organization = organizationCache.getById(id);
         var orgUsers = userService.getUsersByOrgId(organization.getId());
         return new OrganizationInfo(organization.getOrgName(), orgUsers);
     }
