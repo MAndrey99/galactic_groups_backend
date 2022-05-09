@@ -15,3 +15,7 @@ VALUES (2, 'Dmitriy Bond', '7375', 1);
 
 INSERT INTO STUDENT (id, full_name, group_name, phone_number, organization_id)
 VALUES (3, 'Nikita', '7374', '88005553535', 1);
+
+ALTER SEQUENCE organization_id_seq RESTART WITH 100;
+ALTER SEQUENCE service_user_id_seq RESTART WITH 100;
+ALTER SEQUENCE student_id_seq RESTART WITH 100;

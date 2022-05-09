@@ -23,18 +23,13 @@ public class User implements UserSecurityView {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "service_user_seq_gen")
     @SequenceGenerator(name = "service_user_seq_gen", sequenceName = "service_user_id_seq", allocationSize = 1)
-    @Null(groups = OnCreate.class)
     private Long id;
 
     @Column(name = "full_name", nullable = false)
     @NonNull
-    @NotNull
-    @Size(min = 2, max = 64)
     private String fullName;
 
     @Column(name = "mail", unique = true, nullable = false)
-    @NotNull(groups = OnCreate.class)
-    @Email
     private String mail;
 
     @Column(name = "organization_id", nullable = false)
@@ -44,11 +39,9 @@ public class User implements UserSecurityView {
     @Column(name = "role_id", nullable = false)
     @Enumerated(value = EnumType.ORDINAL)
     @NonNull
-    @NotNull
     private UserRole role;
 
     @Column(name = "password_hash", nullable = false)
     @NonNull
-    @NotNull
     private String password;
 }

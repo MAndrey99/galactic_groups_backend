@@ -4,9 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 public interface UserSecurityView extends UserDetails {
 
@@ -20,9 +19,7 @@ public interface UserSecurityView extends UserDetails {
 
     @Override
     default Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>(2);
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole().name()));
-        return authorities;
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + getRole().name()));
     }
 
     @Override

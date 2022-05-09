@@ -1,8 +1,7 @@
 package com.galactic_groups.controllers;
 
+import com.galactic_groups.data.dto.NewUserData;
 import com.galactic_groups.data.dto.UserInfo;
-import com.galactic_groups.data.model.User;
-import com.galactic_groups.data.validation.OnCreate;
 import com.galactic_groups.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,8 +33,7 @@ public class UserController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Validated(OnCreate.class)
-    public UserInfo createUser(@RequestBody @Valid User user) {
+    public UserInfo createUser(@RequestBody @Valid NewUserData user) {
         return userService.createUser(user);
     }
 

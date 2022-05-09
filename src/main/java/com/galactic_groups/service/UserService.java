@@ -1,6 +1,7 @@
 package com.galactic_groups.service;
 
 import com.galactic_groups.data.cache.OrganizationCache;
+import com.galactic_groups.data.dto.NewUserData;
 import com.galactic_groups.data.dto.OrganizationSecurityData;
 import com.galactic_groups.data.dto.UserInfo;
 import com.galactic_groups.data.model.User;
@@ -42,11 +43,18 @@ public class UserService {
     }
 
     @Transactional
-    public UserInfo createUser(@NonNull User user) {
+    public UserInfo createUser(@NonNull NewUserData user) {
         securityService.require(accessManager ->
                 accessManager.checkAccessTo(user, AccessMode.WRITE));
-        userRepository.save(user);
-        var result = buildUserInfo(user);
+        var entity = User.builder()
+                .fullName(user.getFullName())
+                .mail(user.getMail())
+                .password(securityService.encodePassword(user.getPassword()))
+                .organizationId(user.getOrganizationId())
+                .role(user.getRole())
+                .build();
+        userRepository.save(entity);
+        var result = buildUserInfo(entity);
         log.info("created new user: {}", result);
         return result;
     }
@@ -58,6 +66,7 @@ public class UserService {
         securityService.require(accessManager ->
                 accessManager.checkAccessTo(toDelete, AccessMode.WRITE));
         userRepository.delete(toDelete);
+        log.info("deleted user: {}", toDelete);
     }
 
     private UserInfo buildUserInfo(@NonNull User user) {

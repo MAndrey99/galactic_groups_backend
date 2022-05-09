@@ -11,11 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import javax.validation.constraints.Email;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -34,24 +29,7 @@ public class GalacticUserDetailsService implements UserDetailsService {
                     .build();
         }
 
-        if (!isValidMail(mail)) {
-            throw new UsernameNotFoundException("User doesn't exists");
-        }
-
         return userRepository.findByMail(mail)
                 .orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
-    }
-
-    private boolean isValidMail(String mailString) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
-        var mail = new Object() {
-            @Email
-            String mail;
-        };
-        mail.mail = mailString;
-
-        return validator.validate(mail).isEmpty();
     }
 }
