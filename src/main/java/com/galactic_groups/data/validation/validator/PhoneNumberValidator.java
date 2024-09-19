@@ -3,8 +3,8 @@ package com.galactic_groups.data.validation.validator;
 import com.galactic_groups.data.validation.annotation.PhoneNumber;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
 @Slf4j

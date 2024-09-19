@@ -1,15 +1,10 @@
 package com.galactic_groups.data.model;
 
-import com.galactic_groups.data.validation.OnCreate;
 import com.galactic_groups.data.view.UserRole;
 import com.galactic_groups.data.view.UserSecurityView;
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Size;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "service_user")

@@ -12,8 +12,11 @@ create table service_user (
         constraint fk_user_organization
             references organization(id) on delete cascade,
     password_hash varchar(255) not null,
-    role_id integer not null
+    role_id smallint not null
 );
+
+create index service_user_mail_idx on service_user (mail);
+create index student_organization_id_idx on service_user (organization_id);
 
 create table student (
     id bigserial primary key,

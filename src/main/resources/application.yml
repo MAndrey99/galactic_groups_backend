@@ -2,14 +2,17 @@ server:
   port: ${PORT}
 
 springdoc:
-  api-docs:
-    path: /api-docs
+  #  /v3/api-docs.yaml для скачивания
+  swagger-ui:
+    path: /swagger-ui.html
 
 spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
   jpa:
     hibernate:
       ddl-auto: validate
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
   datasource:
     url: ${JDBC_DATABASE_URL}
@@ -25,8 +28,6 @@ management:
         allowed-origins: "*"
         allowed-methods: "*"
         allowed-headers: "*"
-    health:
-      show-details: always
 
 security:
   admin_login:  ${ADMIN_LOGIN}

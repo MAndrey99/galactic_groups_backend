@@ -6,6 +6,7 @@ import com.galactic_groups.data.view.UserRole;
 import com.galactic_groups.data.view.UserSecurityView;
 import lombok.NonNull;
 
+//TODO: по аннатациям типа: @AccessManagerRole("ROLE_ADMIN")
 public class AdminAccessManager implements PersonalAccessManager {
 
     public AdminAccessManager(@NonNull UserSecurityView adminUser) {

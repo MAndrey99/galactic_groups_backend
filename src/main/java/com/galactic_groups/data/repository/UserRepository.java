@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
-    // TODO: как-нибудь потом добавить индексы (mail, OrganizationId)
 
     Optional<User> findByMail(String mail);
 

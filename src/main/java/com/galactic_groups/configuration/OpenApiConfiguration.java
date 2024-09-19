@@ -17,4 +17,4 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(title = "Galactic groups API", version = "v0"),
         security = @SecurityRequirement(name = "basicAuth")
 )
-class OpenAPIConfiguration {}
+class OpenApiConfiguration {}

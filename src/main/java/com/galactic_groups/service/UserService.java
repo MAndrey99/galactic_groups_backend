@@ -1,10 +1,10 @@
 package com.galactic_groups.service;
 
-import com.galactic_groups.data.cache.OrganizationCache;
 import com.galactic_groups.data.dto.NewUserData;
 import com.galactic_groups.data.dto.OrganizationSecurityData;
 import com.galactic_groups.data.dto.UserInfo;
 import com.galactic_groups.data.model.User;
+import com.galactic_groups.data.repository.OrganizationRepository;
 import com.galactic_groups.data.repository.UserRepository;
 import com.galactic_groups.service.security.AccessMode;
 import com.galactic_groups.service.security.SecurityService;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final SecurityService securityService;
-    private final OrganizationCache organizationCache;
+    private final OrganizationRepository organizationRepository;
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
@@ -37,7 +37,7 @@ public class UserService {
         securityService.require(accessManager.checkAccessTo(
                 new OrganizationSecurityData(orgId), AccessMode.READ));
         return userRepository.findByOrganizationId(orgId).stream()
-                .filter(user -> accessManager.checkAccessTo(user, AccessMode.READ).isAllowed())
+                .filter(user -> accessManager.checkAccessTo(user, AccessMode.READ).isAllowed())  // TODO: надо сразу в запрос передать
                 .map(this::buildUserInfo)
                 .toList();
     }
@@ -72,7 +72,7 @@ public class UserService {
     private UserInfo buildUserInfo(@NonNull User user) {
         String orgName = null;
         if (user.getOrganizationId() != null) {
-            orgName = organizationCache.getById(user.getOrganizationId()).getOrgName();
+            orgName = organizationRepository.getReferenceById(user.getOrganizationId()).getOrgName();
         }
         return UserInfo.builder()
                 .id(user.getId())

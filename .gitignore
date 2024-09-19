@@ -1,37 +1,82 @@
-dev/HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Maven target directory
+/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# Logs
+logs/
+*.log
+*.log.*
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+# IDE files
+# IntelliJ IDEA
+/.idea/
+/*.iml
+/out/
 
-### NetBeans ###
+# Eclipse
+/.classpath
+/.project
+/.settings/
+
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+# Visual Studio Code
+/.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary files
+/tmp/
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Compiled class files
+*.class
+
+# Packaged files
+*.jar
+*.war
+*.ear
+
+# Spring Boot devtools restart directory
+.spring-boot-devtools/
+
+# Local environment files
+.env
+
+# Lombok generated files
+lombok.config
+
+# Coverage and report directories
+/coverage/
+/reports/
+/jacoco.exec
+
+# Build directories
+/bin/
+/build/
+
+# Test outputs
+/test-output/
+/surefire/
+
+# Generated sources
+/generated/
+
+# SonarQube analysis
+/.sonar/
+
+# Mac files
+*.DS_Store
